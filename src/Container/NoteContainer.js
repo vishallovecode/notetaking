@@ -10,50 +10,54 @@ const NoteConatiner = (props) => {
 
     const [NoteData, setNoteData] = useState([])
     const [date, setDate] = useState();
-    
 
+    // Date setup function
     const timeStampToDateMonth = dateObj => {
-      
+
         const MonthMap = [
-          "JAN",
-          "FEB",
-          "MAR",
-          "APR",
-          "MAY",
-          "JUN",
-          "JUL",
-          "AUG",
-          "SEP",
-          "OCT",
-          "NOV",
-          "DEC"
+            "JAN",
+            "FEB",
+            "MAR",
+            "APR",
+            "MAY",
+            "JUN",
+            "JUL",
+            "AUG",
+            "SEP",
+            "OCT",
+            "NOV",
+            "DEC"
         ];
         let date = dateObj.getDate();
         let month = MonthMap[dateObj.getMonth()];
-      
-        return `${date} ${month}`;
-      };
 
-    const updateFieldValue = (fieldName,value) => {
-            let updatedFieldsValue = { ...fieldsValue };
-            let currentFieldValue = value;
-            updatedFieldsValue[fieldName] = currentFieldValue;
-            setFieldsValue(updatedFieldsValue);
-   
+        return `${date} ${month}`;
+    };
+    //field update function
+    const updateFieldValue = (fieldName, value) => {
+        let updatedFieldsValue = { ...fieldsValue };
+        let currentFieldValue = value;
+        updatedFieldsValue[fieldName] = currentFieldValue;
+        setFieldsValue(updatedFieldsValue);
+
     };
 
- 
- 
 
 
-useEffect(()=>{
-  let value=   localStorage.getItem("NoteData")
-    setNoteData(JSON.parse(value) || [])
-},[])
+
+
+    useEffect(() => {
+        let value = localStorage.getItem("NoteData")
+        setNoteData(JSON.parse(value) || [])
+    }, [])
+
+    //set date object
     const dateOnchange = (date) => {
         setDate(date)
     }
-    const onSubmit = (type,index) => {
+
+    // submit text
+    const onSubmit = (type, index) => {
 
         if (type == "submit" && !index) {
             const UpdateNoteData = [...NoteData];
@@ -66,9 +70,9 @@ useEffect(()=>{
             // dispatch(addaData(UpdateNoteData))
             localStorage.setItem("NoteData", JSON.stringify(UpdateNoteData))
         }
-        else{
+        else {
             const UpdateNoteData = [...NoteData];
-            UpdateNoteData[index]={ ...fieldsValue }
+            UpdateNoteData[index] = { ...fieldsValue }
             fieldsValue = {}
             setNoteData(UpdateNoteData)
             localStorage.setItem("NoteData", JSON.stringify(UpdateNoteData))
@@ -84,36 +88,38 @@ useEffect(()=>{
             </div>
             <div className="row">
                 <div className="col"  >
-                    <NoteAdd 
+                    <NoteAdd
                         onSubmit={onSubmit}
                         setFieldsValue={setFieldsValue}
                         fieldsValue={fieldsValue}
                         dateOnchange={dateOnchange}
                         date={date}
-                       
-                        
+
+
                     />
                 </div>
                 <div className="col">
-                    <NoteList 
-                      data={NoteData} 
-                     onSubmit={onSubmit}
-                     setFieldsValue={setFieldsValue}
-                     fieldsValue={fieldsValue}
-                     dateOnchange={dateOnchange}
-                     date={date}
-                     
+                    <NoteList
+                        data={NoteData}
+                        onSubmit={onSubmit}
+                        setFieldsValue={setFieldsValue}
+                        fieldsValue={fieldsValue}
+                        dateOnchange={dateOnchange}
+                        date={date}
+
                     />
                 </div>
             </div>
         </div>
     )
 }
-
+//getting data from store
 const mapStateToProps = state => ({
     data: state.data
 
 })
+
+// saving data in store
 const mapDispatchToProps = dispatch => ({
     data: NoteData => dispatch(addaData(NoteData))
 })
